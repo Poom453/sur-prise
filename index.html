@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Surprise ❤️</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: black;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+<canvas id="heart"></canvas>
+
+<script>
+
+const canvas = document.getElementById("heart");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+
+// ==============================
+// ตำแหน่งหัวใจ
+// ==============================
+
+const centerX = canvas.width / 2;
+const centerY = canvas.height / 2;
+
+const scale =
+    Math.min(canvas.width, canvas.height) / 38;
+
+
+// เก็บตำแหน่ง I love you ทั้งหมด
+let points = [];
+
+
+// ==============================
+// สร้างหัวใจ 6 ชั้น
+// ==============================
+
+for (let heartScale = 11; heartScale < 14; heartScale++) {
+
+    for (let i = 0; i < 120; i++) {
+
+        let angle =
+            i * (Math.PI * 2) / 120;
+
+
+        // สมการหัวใจจากโค้ด Python เดิม
+        let x =
+            16 * Math.pow(Math.sin(angle), 3);
+
+
+        let y =
+            13 * Math.cos(angle)
+            - 5 * Math.cos(2 * angle)
+            - 2 * Math.cos(3 * angle)
+            - Math.cos(4 * angle);
+
+
+        points.push({
+
+            x:
+                centerX
+                + x * scale * (heartScale / 13),
+
+            y:
+                centerY
+                - y * scale * (heartScale / 13)
+
+        });
+
+    }
+
+}
+
+
+// ==============================
+// ตั้งค่าการวาด
+// ==============================
+
+ctx.fillStyle = "#ffb6c1";
+
+ctx.font =
+    "bold 12px Arial";
+
+ctx.textAlign =
+    "center";
+
+
+// จำนวนคำที่วาดไปแล้ว
+let currentPoint = 0;
+
+
+// ==============================
+// Animation ค่อย ๆ เติมหัวใจ
+// ==============================
+
+function draw() {
+
+    // วาดคำเพิ่มครั้งละ 1 คำ
+
+    if (currentPoint < points.length) {
+
+        const point =
+            points[currentPoint];
+
+
+        ctx.fillText(
+            "I love you",
+            point.x,
+            point.y
+        );
+
+
+        currentPoint++;
+
+
+        // วาดต่อ
+        setTimeout(draw, 20);
+
+    }
+
+}
+
+
+// เริ่มวาด
+draw();
+
+
+// ==============================
+// ปรับหน้าจอ
+// ==============================
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        canvas.width =
+            window.innerWidth;
+
+        canvas.height =
+            window.innerHeight;
+
+        location.reload();
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>
